@@ -15,7 +15,7 @@ pipeline {
   stages {
     stage('Build Artifact - Maven') {
       steps {
-        bat "mvn clean package -DskipTests=true"
+        sh "mvn clean package -DskipTests=true"
         archive 'target/*.jar'
       }
     }
@@ -23,10 +23,10 @@ pipeline {
       steps {
         parallel(
           "Dependency Scan": {
-            bat "mvn dependency-check:check"
+            sh "mvn dependency-check:check"
           },
           "Trivy Scan": {
-            powershell ('bash trivy-docker-image-scan.sh')
+            sh "bash trivy-docker-image-scan.sh"
           }
         )
       }
@@ -43,7 +43,7 @@ pipeline {
     }
     stage('Clean Image') {
       steps {
-        bat "docker rmi $registry/devsecops:$TAG"
+        sh "docker rmi $registry/devsecops:$TAG"
       }
     }
     stage('Deploy Image') {
@@ -51,8 +51,8 @@ pipeline {
         script {
           dir('sitecore') {
             kubeconfig(credentialsId: 'kubeid') {
-              bat "kustomize edit set image devsecops=*:$TAG"
-              bat "kustomize build . | kubectl apply -f -"
+              sh "kustomize edit set image devsecops=*:$TAG"
+              sh "kustomize build . | kubectl apply -f -"
             }
           }
         }

@@ -53,7 +53,8 @@
 				<configuration>
 					<format>ALL</format>
 					<failBuildOnCVSS>8</failBuildOnCVSS>
-					<nvdApiDelay>32000</nvdApiDelay>
+					<nvdApiKey>6dcd6aeb-55bd-49ea-92e4-90ab61083099</nvdApiKey>
+					<nvdApiDelay>3200</nvdApiDelay>
       <!-- fail the build for CVSS greater than or equal to 5 -->
       <!-- 
 			      use internal mirroring of CVE contents 

@@ -19,7 +19,7 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            def dockerImage = docker.build("${registry}/id:$TAG", "./docker")
+            def dockerImage = docker.build("${registry}/devsecops:$TAG", ".")
             dockerImage.push()
           }  
         }
@@ -27,7 +27,7 @@ pipeline {
     }
     stage('Clean Image') {
       steps {
-        bat "docker rmi $registry/id:$TAG"
+        bat "docker rmi $registry/devsecops:$TAG"
       }
     }
     stage('Deploy Image') {
@@ -35,7 +35,7 @@ pipeline {
         script {
           dir('sitecore') {
             kubeconfig(credentialsId: 'kubeid') {
-              bat "kustomize edit set image nginx-image=*:$TAG"
+              bat "kustomize edit set image devsecops=*:$TAG"
               bat "kustomize build . | kubectl apply -f -"
             }
           }

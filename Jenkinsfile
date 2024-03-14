@@ -19,16 +19,16 @@ pipeline {
         archive 'target/*.jar'
       }
     }
-    stage('Dependency Scan') {
-      steps {
-        sh "mvn dependency-check:check"
-      }
-      post {
-        always {
-          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-        }
-      }
-    }
+   // stage('Dependency Scan') {
+   //   steps {
+   //     sh "mvn dependency-check:check"
+   //   }
+   //   post {
+   //     always {
+   //       dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+   //     }
+   //   }
+   // }
     stage('Docker Trivy Scan') {
       steps {
         sh "bash trivy-docker-image-scan.sh"

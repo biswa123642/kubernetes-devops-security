@@ -16,8 +16,8 @@ spec:
         app: devsecops
     spec:
       containers:
-      - image: replace
-        name: devsecops-container
+      - image: devsecops
+        name: devsecops
 ---
 apiVersion: v1
 kind: Service

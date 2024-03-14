@@ -11,8 +11,20 @@ pipeline {
   stages {
     stage('Build Artifact - Maven') {
       steps {
-        sh "mvn clean package -DskipTests=true"
+        bat "mvn clean package -DskipTests=true"
         archive 'target/*.jar'
+      }
+    }
+    stage('Vulnerability Scan - Docker') {
+      steps {
+        parallel(
+          "Dependency Scan": {
+            bat "mvn dependency-check:check"
+          },
+          "Trivy Scan": {
+            bat "bash trivy-docker-image-scan.sh"
+          }
+        )
       }
     }
     stage('Build And Push Image') {

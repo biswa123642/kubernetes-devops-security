@@ -53,9 +53,15 @@ pipeline {
         }
       }
     }
+    stage('Clean Image') {
+      steps {
+        sh "docker rmi $registry/devsecops:$TAG"
+      }
+    }
     stage('Vulnerability Kubernetes Scan') {
       steps {
         sh "bash trivy-k8s-scan.sh"
+        sh "sudo rm -rf trivy"
       }
     }
     stage('Deploy Image') {
@@ -64,11 +70,6 @@ pipeline {
           sh "kustomize edit set image devsecops=*:$TAG"
           sh "kustomize build . | kubectl apply -f -"
         }
-      }
-    }
-    stage('Clean Image') {
-      steps {
-        sh "docker rmi $registry/devsecops:$TAG"
       }
     }
   }

@@ -37,7 +37,7 @@ pipeline {
             sh "sudo rm -rf trivy"
           },
           "OPA Conftest": {
-            sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
+            sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy dockerfile-security.rego Dockerfile'
           }
         )
       }

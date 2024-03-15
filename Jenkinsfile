@@ -32,16 +32,15 @@ pipeline {
     stage('Docker Trivy Scan') {
       steps {
         sh "bash trivy-docker-image-scan.sh"
+        sh "sudo rm trivy"
       }
     }
     stage('Build And Push Image') {
       steps{
-        dir("${env.WORKSPACE}") {
-          script {
-            docker.withRegistry( '', registryCredential ) {
-              def dockerImage = docker.build("${registry}/devsecops:$TAG")
-              dockerImage.push()
-            }  
+        script {
+          docker.withRegistry( '', registryCredential ) {
+            def dockerImage = docker.build("${registry}/devsecops:$TAG")
+            dockerImage.push() 
           }
         }
       }

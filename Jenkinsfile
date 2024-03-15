@@ -10,6 +10,7 @@ pipeline {
     TAG = "${DATE}.${BUILD_NUMBER}"
     registry = credentials('DOCKER_ID')
     registryCredential = 'dockerhub'
+    imageName = "${registry}/devsecops:$TAG"
   }
   
   stages {
@@ -55,6 +56,11 @@ pipeline {
     stage('Clean Image') {
       steps {
         sh "docker rmi $registry/devsecops:$TAG"
+      }
+    }
+    stage('Vulnerability Kubernetes Scan') {
+      steps {
+        sh "bash trivy-k8s-scan.sh"
       }
     }
     stage('Deploy Image') {

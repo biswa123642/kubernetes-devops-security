@@ -29,10 +29,17 @@ pipeline {
    //     }
    //   }
    // }
-    stage('Docker Trivy Scan') {
+    stage('Docker Vulnerability Scan') {
       steps {
-        sh "bash trivy-docker-image-scan.sh"
-        sh "sudo rm -rf trivy"
+        parallel(
+          "Trivy Scan": {
+            sh "bash trivy-docker-image-scan.sh"
+            sh "sudo rm -rf trivy"
+          },
+          "OPA Conftest": {
+            sh 'docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
+          }
+        )
       }
     }
     stage('Build And Push Image') {

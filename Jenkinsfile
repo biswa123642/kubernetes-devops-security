@@ -53,11 +53,9 @@ pipeline {
     stage('Deploy Image') {
       steps {
         script {
-          dir('sitecore') {
-            kubeconfig(credentialsId: 'kubeid') {
-              sh "kustomize edit set image devsecops=*:$TAG"
-              sh "kustomize build . | kubectl apply -f -"
-            }
+          kubeconfig(credentialsId: 'kubeid') {
+            sh "kustomize edit set image devsecops=*:$TAG"
+            sh "kustomize build . | kubectl apply -f -"
           }
         }
       }

@@ -53,9 +53,11 @@ pipeline {
     stage('Deploy Image') {
       steps {
         script {
-          kubeconfig(credentialsId: 'kubeid') {
-            sh "kustomize edit set image devsecops=*:$TAG"
-            sh "kustomize build . | kubectl apply -f -"
+          dir('security') {
+            kubeconfig(credentialsId: 'kubeid') {
+              sh "kustomize edit set image devsecops=*:$TAG"
+              sh "kustomize build . | kubectl apply -f -"
+            }
           }
         }
       }

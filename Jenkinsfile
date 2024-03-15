@@ -36,7 +36,7 @@ pipeline {
     }
     stage('Build And Push Image') {
       steps{
-        dir('devsecops') {
+        dir("${env.WORKSPACE}") {
           script {
             docker.withRegistry( '', registryCredential ) {
               def dockerImage = docker.build("${registry}/devsecops:$TAG")

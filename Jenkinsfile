@@ -36,11 +36,13 @@ pipeline {
     }
     stage('Build And Push Image') {
       steps{
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            def dockerImage = docker.build("${registry}/devsecops:$TAG")
-            dockerImage.push()
-          }  
+        dir('devsecops') {
+          script {
+            docker.withRegistry( '', registryCredential ) {
+              def dockerImage = docker.build("${registry}/devsecops:$TAG")
+              dockerImage.push()
+            }  
+          }
         }
       }
     }

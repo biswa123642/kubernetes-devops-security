@@ -31,11 +31,7 @@ pipeline {
    // }
     stage('Docker Trivy Scan') {
       steps {
-        script {
-          docker.withRegistry( '', registryCredential ) {
-            sh "bash trivy-docker-image-scan.sh"
-          }
-        }
+        sh "bash trivy-docker-image-scan.sh"
       }
     }
     stage('Build And Push Image') {

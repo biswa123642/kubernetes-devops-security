@@ -42,7 +42,7 @@ pipeline {
       steps{
         script {
           docker.withRegistry( '', registryCredential ) {
-            def dockerImage = docker.build("${registry}/devsecops:$TAG")
+            def dockerImage = docker.build("${registry}/devsecops:$TAG", "./devsecops"")
             dockerImage.push()
           }  
         }

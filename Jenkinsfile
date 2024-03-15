@@ -32,7 +32,7 @@ pipeline {
     stage('Docker Trivy Scan') {
       steps {
         sh "bash trivy-docker-image-scan.sh"
-        sh "rm -rf trivy"
+        sh "sudo rm -rf trivy"
       }
     }
     stage('Build And Push Image') {

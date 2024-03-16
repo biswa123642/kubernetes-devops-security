@@ -1,11 +1,23 @@
 #!/bin/bash
 
-total_fail=$(docker run --pid=host -v /etc:/etc:ro -v /var:/var:ro -v $(which kubectl):/usr/local/mount-from-host/bin/kubectl -v ~/.kube:/.kube -e KUBECONFIG=/.kube/config -t aquasec/kube-bench:latest  run --targets node --version 1.28 --check 3.1.1,3.1.2 --json | jq -r '.Totals.total_fail')
+JOB_NAME="kube-bench"
+
+#Create Job
+kubectl create -f kube-bench-job.yaml
+kubectl wait --for=condition=complete --timeout=60s job/$JOB_NAME
+
+
+podname=$(kubectl get pods -l job-name=kube-bench -o=jsonpath='{.items..metadata.name}')
+
+total_fail=$(kubectl logs $podname | grep "checks FAIL" | tail -n 1 | awk '{print $1}')
 
 if [[ "$total_fail" -ne 0 ]];
         then
-                echo "CIS Benchmark Failed Kubelet while testing for 3.1.1, 3.1.2"
+                echo "CIS Benchmark Failed Node while testing"
                 exit 1;
         else
-                echo "CIS Benchmark Passed Kubelet for 3.1.1, 3.1.2"
+                echo "CIS Benchmark Passed for Node"
 fi;
+
+#Delete Job
+kubectl delete -f kube-bench-job.yaml

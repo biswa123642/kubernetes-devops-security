@@ -74,6 +74,11 @@ pipeline {
         }
       }
     }
+    stage('K8S CIS Benchmark') {
+      steps {
+        sh "bash cis-kubelet.sh"
+      }
+    }
   }
   post {
     always {

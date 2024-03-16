@@ -74,10 +74,10 @@ pipeline {
         }
       }
     }
-    post {
-      always {
-        sendNotification currentBuild.result
-      }
+  }
+  post {
+    always {
+      sendNotification currentBuild.result
     }
   }
 }

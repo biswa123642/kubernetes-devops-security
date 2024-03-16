@@ -1,3 +1,5 @@
+@Library('slacklibrary') _
+
 pipeline {
   agent any
   tools {

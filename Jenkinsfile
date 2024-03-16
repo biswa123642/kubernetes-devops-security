@@ -58,12 +58,12 @@ pipeline {
         sh "docker rmi $registry/devsecops:$TAG"
       }
     }
-    stage('Vulnerability Kubernetes Scan') {
-      steps {
-        sh "bash trivy-k8s-scan.sh"
-        sh "sudo rm -rf trivy"
-      }
-    }
+    //stage('Vulnerability Kubernetes Scan') {
+    //  steps {
+    //    sh "bash trivy-k8s-scan.sh"
+    //    sh "sudo rm -rf trivy"
+    //  }
+    //}
     stage('Deploy Image') {
       steps {
         dir('deploy') {

@@ -74,5 +74,10 @@ pipeline {
         }
       }
     }
+    post {
+      always {
+        sendNotification currentBuild.result
+      }
+    }
   }
 }

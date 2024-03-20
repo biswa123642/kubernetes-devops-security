@@ -22,12 +22,11 @@ pipeline {
         archiveArtifacts 'target/*.jar'
       }
     }
-    stages {
-      stage('Build Artifact - Maven') {
-        steps {
-          sh "mvn test"
-        }
+    stage('Build Artifact - Maven') {
+      steps {
+        sh "mvn test"
       }
+    }
    // stage('Dependency Scan') {
    //   steps {
    //     sh "mvn dependency-check:check"

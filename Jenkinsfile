@@ -22,6 +22,12 @@ pipeline {
         archiveArtifacts 'target/*.jar'
       }
     }
+    stages {
+      stage('Build Artifact - Maven') {
+        steps {
+          sh "mvn test"
+        }
+      }
    // stage('Dependency Scan') {
    //   steps {
    //     sh "mvn dependency-check:check"
@@ -82,6 +88,8 @@ pipeline {
   }
   post {
     always {
+      junit 'target/surefire-reports/*.xml'
+      jacoco execPattern: 'target/jacoco.exec'
       sendNotification currentBuild.result
     }
   }

@@ -22,7 +22,7 @@ pipeline {
         archiveArtifacts 'target/*.jar'
       }
     }
-    stage('Build Artifact - Maven') {
+    stage('Unit Tests - JUnit And Jacoco') {
       steps {
         sh "mvn test"
       }
